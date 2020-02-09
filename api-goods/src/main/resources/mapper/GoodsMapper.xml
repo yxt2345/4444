@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 为这个mapper指定一个唯一的namespace，namespace的值习惯上设置成包名+sql映射文件名，这样就能够保证namespace的值是唯一的
+	例如namespace="com.szh.mapper.personMapper"就是com.szh.mapper(包名)+personMapper(personMapper.xml文件去除后缀) -->
+<mapper namespace="com.fh.mapper.GoodsMapper">
+
+    <sql id="whereSql">
+        <where>
+            <if test="name != null and name != ''">
+                and name like concat('%',#{name},'%')
+            </if>
+
+            <if test="barCode != null and barCode != ''">
+                and barCode like concat('%',#{barCode},'%')
+            </if>
+
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="minPrice != null">
+                <![CDATA[
+              and price >= #{minPrice}
+              ]]>
+            </if>
+            <if test="maxPrice != null">
+                <![CDATA[
+            and price <= #{maxPrice}
+            ]]>
+            </if>
+
+            <if test="minSales != null">
+                <![CDATA[
+              and sales >= #{minSales}
+              ]]>
+            </if>
+            <if test="maxSales != null">
+                <![CDATA[
+            and sales <= #{maxSales}
+            ]]>
+            </if>
+
+            <if test="minStock != null">
+                <![CDATA[
+              and stock >= #{minStock}
+              ]]>
+            </if>
+            <if test="maxStock != null">
+                <![CDATA[
+            and stock <= #{maxStock}
+            ]]>
+            </if>
+
+            <if test="minProducedDate != null">
+                <![CDATA[
+              and producedDate >= #{minProducedDate}
+              ]]>
+            </if>
+            <if test="maxProducedDate != null">
+                <![CDATA[
+            and producedDate <= #{maxProducedDate}
+            ]]>
+            </if>
+            status = 1
+        </where>
+    </sql>
+
+
+    <select id="queryGoods" resultType="goods" parameterType="goodsQuery">
+        select tg.*,ta.name as 'areaName' from t_goods tg
+        left join t_area1 ta on tg.area_id = ta.id
+        <include refid="whereSql"></include>
+        limit #{start},#{length}
+    </select>
+
+    <select id="queryGoodsCount" resultType="long" parameterType="goodsQuery">
+        select count(*) from t_goods
+        <include refid="whereSql"></include>
+    </select>
+
+    <insert id="addGoods" parameterType="goods" useGeneratedKeys="true" keyProperty="id">
+        insert into t_goods(name,price,sales,stock,shelf_life,bar_code,status,area_id,image_url,produced_date)
+                            values(
+        #{name},#{price},#{sales},#{stock},#{shelfLife},#{barCode},#{status},#{areaId},#{imageUrl},#{producedDate}
+                            )
+    </insert>
+
+    <update id="deleteGoods" parameterType="int">
+        update t_goods set status=2 where id = #{id}
+    </update>
+
+
+    <select id="getGoodsById" parameterType="int" resultType="goods">
+        select * from t_goods where id = #{id}
+    </select>
+
+
+    <update id="updateGoods" parameterType="goods">
+        update t_goods set
+          name=#{name},price=#{price},sales=#{sales},stock=#{stock},shelf_life=#{shelfLife},bar_code=#{barCode},status=#{status},area_id=#{areaId},image_url=#{imageUrl},produced_date=#{producedDate}
+          where id = #{id}
+    </update>
+
+
+    <select id="queryChangeName" parameterType="string" resultType="goods">
+        select tg.name from t_goods tg where name = #{goodsName}
+    </select>
+
+    <select id="queryChangeBarCode" parameterType="string" resultType="goods">
+        select tg.bar_code from t_goods tg where bar_code = #{barCode}
+    </select>
+
+</mapper>

@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="bootstrap/js/jquery-3.3.1.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+
+    <script src="bootstrap/js/bootbox.min.js"></script>
+    <script src="bootstrap/js/bootbox.locales.min.js"></script>
+
+    <link href="js/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="js/DataTables/js/jquery.dataTables.js"></script>
+
+    <link href="js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <script src="js/bootstrap-datetimepicker/js/moment-with-locales.js"></script>
+    <script src="js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+
+    <link href="js/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" />
+    <script src="js/bootstrap-fileinput/js/fileinput.js"></script>
+    <script src="js/bootstrap-fileinput/js/locales/zh.js"></script>
+
+    <script src="js/date-format.js"></script>
+
+    <script src="js/bootstrap-select/js/bootstrap-select.min.js"></script>
+    <script src="js/bootstrap-select/js/i18n/defaults-zh_CN.min.js"></script>
+    <link href="js/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet" />
+    <script>
+        var basic = {
+            "sProcessing": "处理中...",
+            "sLengthMenu": "显示 _MENU_ 项结果",
+            "sZeroRecords": "没有匹配结果",
+            "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+            "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+            "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+            "sInfoPostFix": "",
+            "sSearch": "搜索:",
+            "sUrl": "",
+            "sEmptyTable": "表中数据为空",
+            "sLoadingRecords": "载入中...",
+            "sInfoThousands": ",",
+            "oPaginate": {
+                "sFirst": "首页",
+                "sPrevious": "上页",
+                "sNext": "下页",
+                "sLast": "末页"
+            },
+            "oAria": {
+                "sSortAscending": ": 以升序排列此列",
+                "sSortDescending": ": 以降序排列此列"
+            }
+        };
+    </script>
+</head>
+<body>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        条件查询
+    </div>
+    <div class="panel-body">
+        <form class="form-horizontal">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">商品名称:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="name" placeholder="请输入商品名称">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">商品价格:</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="minPrice">
+                                    <span class="input-group-addon"><--></span>
+                                    <input type="text" class="form-control" id="maxPrice">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">商品销量:</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="minSales">
+                                    <span class="input-group-addon"><--></span>
+                                    <input type="text" class="form-control" id="maxSales">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">商品库存:</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="minStock">
+                                    <span class="input-group-addon"><--></span>
+                                    <input type="text" class="form-control" id="maxStock">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">生产日期:</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="minProducedDate">
+                                    <span class="input-group-addon">至</span>
+                                    <input type="text" class="form-control" id="maxProducedDate">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">是否上架:</label>
+                            <div class="col-sm-10">
+                                <label class="radio-inline">
+                                    <input type="radio" name="status" value="1"/>是
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="status" value="2"/>否
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">保质期:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="barCode" placeholder="请输入保质期">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                    </div>
+                </div>
+                <div class="row">
+                    <div style="padding-left:110px">
+                        <button type="button" onclick="search()" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-search"></span>查询
+                        </button>
+                        &nbsp;
+                        <button type="reset" class="btn btn-danger">
+                            <span class="glyphicon glyphicon-refresh"></span>重置
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">商品列表</div>
+    <div class="panel-body">
+        <div style="margin-bottom:10px">
+            <button type="button" onclick="showAddGoodsDiv()" class="btn btn-primary">
+                <span class="glyphicon glyphicon-plus"></span>新增
+            </button>
+            <button type="button" onclick="batchDelete()" class="btn btn-danger">
+                <span class="glyphicon glyphicon-minus"></span>批量删除
+            </button>
+        </div>
+        <table id="goodsTable" class="table table-striped table-bordered table-hover table-condensed">
+        </table>
+    </div>
+</div>
+
+
+<!-- 添加页面 -->
+<div id="addGoodsDiv" style="display:none">
+    <form class="form-horizontal" id="addGoodsForm">
+        <div class="form-group">
+            <label class="col-sm-4 control-label">商品名称:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="addName" onchange="changeName()"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">条形码:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="addBarCode" onchange="changeBarCode()"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">商品价格:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="addPrice" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">产地:</label>
+            <div class="col-sm-4" id="addAreaId">
+                <!--<select id="addAreaId" class="form-control">
+                    <option value="-1">请选择</option>
+                </select>-->
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">商品销量:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="addStock" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">商品库存:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="addSales" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">保质期:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="addShelfLife" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">是否上架:</label>
+            <div class="col-sm-8">
+                <label class="radio-inline">
+                    <input type="radio" name="addStatus" value="1"/>是
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="addStatus" value="2"/>否
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">商品图片</label>
+            <div class="col-sm-4">
+                <!-- 用于上传图片的相对路径的隐藏域 -->
+                <input type="hidden" id="posterPath" value="" />
+                <input type="file" multiple name="poster" id="poster" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">生产日期:</label>
+            <div class="col-sm-4">
+                <input type="text" id="addProducedDate" class="form-control" />
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- 修改页面 -->
+<div id="updateGoodsDiv" style="display:none">
+    <form class="form-horizontal" id="updateGoodsForm">
+        <div class="form-group">
+            <label class="col-sm-4 control-label">商品名称:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="updateName" onchange="changeName()"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">条形码:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="updateBarCode" onchange="changeBarCode()"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">商品价格:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="updatePrice" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">产地:</label>
+            <div class="col-sm-4" id="updateAreaId">
+                <!--<select id="updateAreaId" class="form-control">
+                    <option value="-1">请选择</option>
+                </select>-->
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">商品销量:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="updateStock" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">商品库存:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="updateSales" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">保质期:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="updateShelfLife" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">是否上架:</label>
+            <div class="col-sm-8">
+                <label class="radio-inline">
+                    <input type="radio" name="updateStatus" value="1"/>是
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="updateStatus" value="2"/>否
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">商品图片</label>
+            <div class="col-sm-4">
+                <!-- 用于上传图片的相对路径的隐藏域 -->
+                <input type="hidden" id="updatePosterPath" value="" />
+                <img src="" id="updatePhotoImg" class="img-thumbnail"/>
+                <input type="file" multiple name="poster" id="updatePoster" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">生产日期:</label>
+            <div class="col-sm-4">
+                <input type="text" id="updateProducedDate" class="form-control" />
+            </div>
+        </div>
+    </form>
+</div>
+
+</body>
+
+<script>
+    function minProducedDate(){
+        $("#minProducedDate").datetimepicker({
+            format:"YYYY-MM-DD HH:mm:ss",
+            locale:"zh-CN",
+            showClear:true
+        });
+    }
+    function maxProducedDate(){
+        $("#maxProducedDate").datetimepicker({
+            format:"YYYY-MM-DD HH:mm:ss",
+            locale:"zh-CN",
+            showClear:true
+        });
+    }
+    function addProducedDate(){
+        $("#addProducedDate").datetimepicker({
+            format:"YYYY-MM-DD HH:mm:ss",
+            locale:"zh-CN",
+            showClear:true
+        });
+    }
+
+    function updateProducedDate(){
+        $("#updateProducedDate").datetimepicker({
+            format:"YYYY-MM-DD HH:mm:ss",
+            locale:"zh-CN",
+            showClear:true
+        });
+    }
+
+    $(function(){
+        //条件查询里的时间
+        minProducedDate();
+        maxProducedDate();
+
+        //添加的时间
+        addProducedDate();
+
+        //修改的时间
+        updateProducedDate();
+
+        //查询
+        queryGoods();
+
+        //初始化
+        addGoodsHtml = $("#addGoodsDiv").html();
+        updateGoodsHtml = $("#updateGoodsDiv").html();
+
+        //初始化图片
+        inputPhoto();
+        //初始化图片
+        inputUpdatePhoto();
+
+    });
+
+    function search(){
+        goodsTable.ajax.reload();
+    }
+
+    var basePath = "http://localhost:8082";
+
+    var goodsTable;
+    function queryGoods(){
+        goodsTable = $("#goodsTable").DataTable({
+            searching:false,
+            ordering:false,
+            serverSide:true, //开启服务端模式
+            lengthMenu:[3,5,10,15],
+            processing:true,//是否显示正在处理中
+            language:basic,
+            ajax:{
+                url:basePath+"/GoodsController/queryGoods",
+                data:function(param){
+                    param.name = $("#name").val();
+                    param.barCode = $("#barCode").val();
+                    param.minPrice = $("#minPrice").val();
+                    param.maxPrice = $("#maxPrice").val();
+                    param.minSales = $("#minSales").val();
+                    param.maxSales = $("#maxSales").val();
+                    param.minStock = $("#minSales").val();
+                    param.maxStock = $("#maxStock").val();
+                    param.minProducedDate = $("#minProducedDate").val();
+                    param.maxProducedDate = $("#maxProducedDate").val();
+                    param.status = $("[name=status]:checked").val();
+                },
+                dataSrc:function(f){
+                    if(f.code==200){
+                        f.draw =f.data.draw;
+                        f.recordsTotal=f.data.recordsTotal;
+                        f.recordsFiltered=f.data.recordsFiltered;
+                        return f.data.data;
+                    }else{
+                        return ""
+                    }
+                }
+            },
+            columns:[
+                {
+                    data:"id",
+                    title:"<input type='checkbox' onclick='selectAll()'/>",
+                    render:function(data){
+                        return "<input type='checkbox' name='check' value='"+data+"'/>";
+                    }
+                },
+                {
+                    title:"商品名称",
+                    data:"name"
+                },
+                {
+                    title:"条形码",
+                    data:"barCode"
+                },
+                {
+                    title:"商品价格",
+                    data:"price"
+                },
+                {
+                    title:"商品销量",
+                    data:"sales"
+                },
+                {
+                    title:"商品库存",
+                    data:"stock"
+                },
+                {
+                    title:"保质期",
+                    data:"shelfLife"
+                },
+                {
+                    title:"是否上架",
+                    data:"status",
+                    render:function(data){
+                        return data==1?"是":"否";
+                    }
+                },
+                {
+                    title:"生产地区",
+                    data:"areaName"
+                },
+                {
+                    title:"商品图片",
+                    "data": "imageUrl",
+                    "render":function(data, type, full, meta){
+                        return "<img width='50px' src='"+ data +"'>";
+                    }
+                },
+                {
+                    title:"生产日期",
+                    data:"producedDate"
+                },
+                {
+                    data:"id",
+                    title:"操作",
+                    render:function(data){
+                        var buttonsHTML = "";
+                        buttonsHTML += '<div class="btn-group btn-group-xs">';
+                        buttonsHTML += '<button type="button" onclick="showUpdateGoodsDialog(' + data + ')" class="btn btn-success">';
+                        buttonsHTML += '<span class="glyphicon glyphicon-pencil"></span>&nbsp;修改';
+                        buttonsHTML += '</button>';
+                        buttonsHTML += '<button type="button" onclick="deleteGoods(' + data + ')" class="btn btn-danger">';
+                        buttonsHTML += '<span class="glyphicon glyphicon-trash"></span>&nbsp;删除';
+                        buttonsHTML += '</div>';
+                        return buttonsHTML;
+                    }}
+            ]
+        });
+    }
+
+    //图片
+    function inputPhoto(){
+        $("#poster").fileinput({
+            language:"zh",
+            previewFileType:"image",
+            uploadClass:"btn btn-primary",
+            allowedFileTypes:['image','html','text','video','audio','flash','object'],
+            allowedFileExtensions:['jpg','gif','png','txt'],
+            maxFileSize:1024,
+            maxFileCount:5,
+            uploadUrl:basePath+"/GoodsController/uploadFile"
+        });
+        $("#poster").on("fileuploaded",function(event,data,previewId,index){
+            var response = data.response;
+            if(response.code == 200){
+                $("#posterPath").val(response.mainImages);
+            }else{
+                alert("文件上传过程中出现异常，请联系管理员！");
+            }
+        });
+    }
+
+    //添加页面
+    var addGoodsHtml;
+    function showAddGoodsDiv(){
+
+        //queryArea();
+
+        /*var addDrugBrandOptionsHTML = "";
+        for(var i = 0 ; i < drugBrandArr.length ; i ++ ){
+            addDrugBrandOptionsHTML += "<option value='" + drugBrandArr[i].brandId + "'>" + drugBrandArr[i].brandName + "</option>";
+        }
+        $("#addBrandId").append(addDrugBrandOptionsHTML);*/
+
+
+        /*var addAreaOptionsHTML = "";
+        for(var i = 0 ; i < drugAreaArr.length ; i ++ ){
+            addAreaOptionsHTML += "<option value='" + drugAreaArr[i].areaId + "'>" + drugAreaArr[i].areaName + "</option>";
+        }
+        $("#addAreaId").append(addAreaOptionsHTML);*/
+
+        bootbox.confirm({
+            title:"新增商品",
+            message:$("#addGoodsDiv form"),
+            size:"lg",
+            scrollable:true,
+            callback:function(result){
+                if (result) {
+                    var param = {};
+                    param.name = $("#addName").val();
+                    param.barCode = $("#addBarCode").val();
+                    param.price = $("#addPrice").val();
+                    param.sales = $("#addSales").val();
+                    param.stock = $("#addStock").val();
+                    param.areaId = $("#addAreaId").val();
+                    param.shelfLife = $("#addShelfLife").val();
+                    param.status = $("[name=addStatus]:checked").val();
+                    param.imageUrl = $("#posterPath").val();
+                    param.producedDate = $("#addProducedDate").val();
+                    $.ajax({
+                        url:basePath+"/GoodsController/addGoods",
+                        type:"post",
+                        dataType:"json",
+                        /*contentType:"application/json;charset=utf-8",
+                        data:JSON.stringify(param),*/
+                        data:param,
+                        success:function(result){
+                            if(result.code == 200){
+                                bootbox.alert({
+                                    title:"<b>成功提示</b>",
+                                    message:"恭喜您添加成功!",
+                                    buttons:{
+                                        ok:{
+                                            label:"确定"
+                                        }
+                                    }
+                                });
+                                search();
+                            }
+                        },
+                        error:function(){
+                            alert("新增商品失败，请联系管理员！");
+                        }
+                    });
+                }
+                $("#addGoodsDiv").html(addGoodsHtml);
+                addProducedDate();
+                inputPhoto();
+            },
+            buttons:{
+                confirm:{
+                    label:"确认",
+                    className:"btn btn-success"
+                },
+                cancel:{
+                    label:"取消",
+                    className:"btn btn-danger"
+                }
+            }
+        });
+    }
+
+
+
+    function changeName() {
+        var goodsName =  $("#addName").val();
+        $.ajax({
+            url:basePath + "/GoodsController/queryChangeName",
+            type:"post",
+            data:{goodsName:goodsName},
+            dataType:"json",
+            success:function(result){
+                if(result.code == 200){
+                    if(result.data == 1){
+                        alert("名字已经重复");
+                    }else{
+                        alert("名字不重复");
+                    }
+                }
+            },
+        });
+    }
+
+
+    function changeName() {
+        var goodsName =  $("#updateName").val();
+        $.ajax({
+            url:basePath + "/GoodsController/queryChangeName",
+            type:"post",
+            data:{goodsName:goodsName},
+            dataType:"json",
+            success:function(result){
+                if(result.code == 200){
+                    if(result.data == 1){
+                        alert("名字已经重复");
+                    }else{
+                        alert("名字不重复");
+                    }
+                }
+            },
+        });
+    }
+
+    function changeBarCode() {
+        var barCode =  $("#addBarCode").val();
+        $.ajax({
+            url:basePath + "/GoodsController/queryChangeBarCode",
+            type:"post",
+            data:{barCode:barCode},
+            dataType:"json",
+            success:function(result){
+                if(result.code == 200){
+                    if(result.data == 1){
+                        alert("条形码已经重复");
+                    }else{
+                        alert("条形码不重复");
+                    }
+                }
+            },
+        });
+    }
+
+
+    function changeBarCode() {
+        var barCode =  $("#updateBarCode").val();
+        $.ajax({
+            url:basePath + "/GoodsController/queryChangeBarCode",
+            type:"post",
+            data:{barCode:barCode},
+            dataType:"json",
+            success:function(result){
+                if(result.code == 200){
+                    if(result.data == 1){
+                        alert("条形码已经重复");
+                    }else{
+                        alert("条形码不重复");
+                    }
+                }
+            },
+        });
+    }
+
+    //删除
+    function deleteGoods(id){
+        bootbox.confirm({
+            title:"删除提示",
+            message:"您确定要删除吗?",
+            buttons:{
+                confirm:{
+                    label:"确定"
+                },
+                cancel:{
+                    label:"取消"
+                }
+            },
+            callback:function(result){
+                if(result){
+                    $.ajax({
+                        url:basePath+"/GoodsController/deleteGoods",
+                        type:"post",
+                        dataType:"json",
+                        data:{"id":id},
+                        success:function(result){
+                            if(result.code == 200){
+                                search();
+                                alert("删除成功");
+                            }else{
+                                alert("失败");
+                            }
+
+                        },
+                        error:function(){
+                            alert("删除失败！");
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+
+    //修改图片
+    function inputUpdatePhoto(){
+        $("#updatePoster").fileinput({
+            language:"zh",
+            previewFileType:"image",
+            uploadClass:"btn btn-primary",
+            allowedFileTypes:['image','html','text','video','audio','flash','object'],
+            allowedFileExtensions:['jpg','gif','png','txt'],
+            maxFileSize:1024,
+            maxFileCount:5,
+            uploadUrl:basePath+"/GoodsController/uploadFile"
+        });
+        $("#updatePoster").on("fileuploaded",function(event,data,previewId,index){
+            var response = data.response;
+            if(response.code == 200){
+                $("#updatePosterPath").val(response.mainImages);
+                $("#updatePhotoImg").attr("src",response.mainImages);
+            }else{
+                alert("文件上传过程中出现异常，请联系管理员！");
+            }
+        });
+    }
+
+
+    //修改
+    var updateGoodsHtml;
+    function showUpdateGoodsDialog(id){
+        $.ajax({
+            url:basePath + "/GoodsController/getGoodsById",
+            dataType:"json",
+            data:{"id":id},
+            success:function(result){
+
+                if(result.code == 200){
+                    var goods = result.data;
+                    //回显修改表单中的数据
+
+                    $("#updateName").val(goods.name);
+                    $("#updatePrice").val(goods.price);
+                    $("#updateSales").val(goods.sales);
+                    $("#updateStock").val(goods.stock);
+                    $("#updateBarCode").val(goods.barCode);
+                    $("#updateShelfLife").val(goods.shelfLife);
+                   /* //回显产地
+                    for(var i = 0 ; i < drugAreaArr.length ; i ++ ){
+                        $("#updateAreaId").append('<option '+(drugAreaArr[i].areaId==drug.areaId?"selected":"")+' value="'+drugAreaArr[i].areaId+'">'+drugAreaArr[i].areaName+'</option>');
+                    }
+                    $("#updateAreaId").selectpicker('refresh');*/
+
+                    $("[name=updateStatus][value="+goods.status+"]").prop("checked",true);
+                    //回显图片
+                    $("#updatePhotoImg").attr("src",goods.imageUrl);
+                    //回显图片路径隐藏域
+                    $("#updatePosterPath").val(goods.imageUrl);
+                    //回显生产日期
+                    $("#updateProducedDate").val(goods.producedDate);
+                }
+
+                bootbox.confirm({
+                    title:"修改商品",
+                    message:$("#updateGoodsDiv form"),
+                    size:"lg",
+                    scrollable:true,
+                    callback:function(result){
+                        if(result){
+                            var param = {};
+                            param.id = goods.id;
+                            param.name = $("#updateName").val();
+                            param.price = $("#updatePrice").val();
+                            param.barCode = $("#updateBarCode").val();
+                            param.shelfLife = $("#updateShelfLife").val();
+                            param.sales = $("#updateSales").val();
+                            param.stock = $("#updateStock").val();
+                            param.areaId = $("#updateAreaId").val();
+                            param.status = $("[name=updateStatus]:checked").val();
+                            param.imageUrl = $("#updatePosterPath").val();
+
+                            param.producedDate = $("#updateProducedDate").val();
+
+                            $.ajax({
+                                url:basePath + "/GoodsController/updateGoods",
+                                type:"post",
+                                dataType:"json",
+                                /*contentType:"application/json;charset=utf-8",
+                                data:JSON.stringify(param),*/
+                                data:param,
+                                success:function(result){
+                                    if(result.code == 200){
+                                        bootbox.alert({
+                                            title:"<b>成功提示</b>",
+                                            message:"恭喜您修改成功!",
+                                            buttons:{
+                                                ok:{
+                                                    label:"确定"
+                                                }
+                                            }
+                                        });
+                                        search();
+                                    }
+                                },
+                                error:function(){
+                                    alert("修改商品失败，请联系管理员！");
+                                }
+                            });
+                        }
+
+                        $("#updateGoodsDiv").html(updateGoodsHtml);
+                        inputUpdatePhoto();
+                        updateProducedDate();
+                    },
+                    buttons:{
+                        confirm:{
+                            label:"确认",
+                            className:"btn btn-success"
+                        },
+                        cancel:{
+                            label:"取消",
+                            className:"btn btn-danger"
+                        }
+                    }
+                });
+
+            },
+            error:function(){
+                alert("获取商品信息失败，请联系管理员！");
+            }
+        });
+    }
+
+</script>
+
+</html>
